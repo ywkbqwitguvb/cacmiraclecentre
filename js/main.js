@@ -513,6 +513,102 @@ function handleTestimonySubmit(event) {
     closeModal();
 }
 
+// Giving page JS — unified, lightweight MVP with safe fallbacks
+(function(){
+    // TODO: set your payment provider merchant ID to enable hosted checkout
+    // Example for Naria: 'org_ABCDE12345'
+    const MERCHANT_ID = '';
+    const CURRENCY = 'NGN';
+
+    const amounts = document.querySelectorAll('.amount-btn');
+    const customAmount = document.getElementById('customAmount');
+    const donationForm = document.getElementById('donationForm');
+    const confirmation = document.getElementById('donationConfirmation');
+    const payBtn = document.getElementById('payWithCard');
+
+    let selectedAmount = null;
+
+    // Amount selection
+    amounts.forEach(btn => btn.addEventListener('click', () => {
+        amounts.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedAmount = btn.dataset.amount;
+        customAmount.value = '';
+    }));
+
+    customAmount.addEventListener('input', () => {
+        amounts.forEach(b => b.classList.remove('selected'));
+        selectedAmount = customAmount.value;
+    });
+
+    // Submit handler
+    donationForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('donorName').value.trim();
+        const email = document.getElementById('donorEmail').value.trim();
+        const purpose = document.getElementById('donationPurpose').value;
+        const frequency = donationForm.querySelector('input[name="frequency"]:checked').value;
+        const coverFees = document.getElementById('coverFees').checked;
+        const amount = parseFloat(selectedAmount);
+
+        if (!amount || amount <= 0) {
+            alert('Please enter a valid donation amount.');
+            return;
+        }
+
+        // If a merchant is configured, redirect to hosted checkout (example URL format)
+        if (MERCHANT_ID) {
+            const returnUrl = encodeURIComponent(window.location.href);
+            const meta = encodeURIComponent(JSON.stringify({ name, email, purpose, coverFees }));
+            const nariaUrl = `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}&amount=${encodeURIComponent(amount.toFixed(2))}&currency=${encodeURIComponent(CURRENCY)}&frequency=${encodeURIComponent(frequency)}&metadata=${meta}&returnUrl=${returnUrl}`;
+            window.location.href = nariaUrl;
+            return;
+        }
+
+        // Fallback when online payments are not configured
+        // Display a confirmation and provide instructions to use Bank Transfer
+        confirmation.hidden = false;
+        donationForm.hidden = true;
+
+        // Optionally open a prefilled email to finance/admin for manual processing
+        const mail = 'info@cacmiraclecentres.org';
+        const subject = encodeURIComponent('Donation Intention');
+        const body = encodeURIComponent(
+            `Hello,\n\nI would like to give ${CURRENCY} ${amount.toFixed(2)} (${frequency}).\nPurpose: ${purpose}\nName: ${name || '-'}\nEmail: ${email || '-'}\nCover fees: ${coverFees ? 'Yes' : 'No'}\n\nThank you.`
+        );
+        // Uncomment the next line if you want to automatically open the mail client
+        // window.location.href = `mailto:${mail}?subject=${subject}&body=${body}`;
+    });
+
+    // QR code generation — direct to hosted checkout if configured; otherwise this page
+    const qrTarget = MERCHANT_ID ? `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}` : window.location.href;
+    new QRious({ element: document.getElementById('qrCode'), value: qrTarget, size: 160 });
+
+    // Tithe calculator
+    const calculateTitheBtn = document.getElementById('calculateTithe');
+    const incomeAmount = document.getElementById('incomeAmount');
+    const titheResult = document.getElementById('titheResult');
+
+    calculateTitheBtn.addEventListener('click', () => {
+        const income = parseFloat(incomeAmount.value);
+        if (income && income > 0) {
+            const tithe = income * 0.1;
+            titheResult.textContent = `Your tithe amount: ₦${tithe.toFixed(2)}`;
+            // Set the selected amount to the calculated tithe
+            selectedAmount = tithe.toFixed(2);
+            amounts.forEach(b => b.classList.remove('selected'));
+            customAmount.value = tithe.toFixed(2);
+        } else {
+            titheResult.textContent = 'Please enter a valid income amount.';
+        }
+    });
+
+    // If no merchant configured, visually indicate the button still works with fallback
+    if (!MERCHANT_ID) {
+        payBtn.setAttribute('title', 'Online payments will show instructions until a provider is configured.');
+    }
+})();
+
 // Initialize all functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     populateAnnouncements();

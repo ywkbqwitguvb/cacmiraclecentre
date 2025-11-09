@@ -34,64 +34,90 @@
   </nav>
 
   <main id="main" class="giving-page">
-    <section class="contact-hero">
+    <section class="giving-hero">
       <div class="hero-content">
         <h1>Partner With The Mission</h1>
-        <p>Your generosity helps us serve our community, support ministries, and share the Gospel.</p>
+        <p>Your generosity transforms lives, supports our community, and spreads the Gospel message.</p>
         <p class="hero-sub">“Each of you should give what you have decided in your heart to give.” — 2 Corinthians 9:7</p>
+        <a href="#donationForm" class="cta-button">Start Giving Today</a>
       </div>
     </section>
 
-    <section class="giving-content" style="padding: 2rem 1rem;">
+    <section class="why-give-section" style="padding: 4rem 2rem; background: var(--color-muted);">
       <div class="container" style="max-width: 1100px;">
-        <div class="service-grid" style="align-items: stretch;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Why Give?</h2>
+        <div class="impact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+          <div class="impact-card" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: var(--shadow-sm); text-align: center;">
+            <i class="fas fa-heart" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+            <h3>Support Ministries</h3>
+            <p>Your gifts help fund outreach programs, youth activities, and community services that touch lives daily.</p>
+          </div>
+          <div class="impact-card" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: var(--shadow-sm); text-align: center;">
+            <i class="fas fa-church" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+            <h3>Build Community</h3>
+            <p>Contribute to maintaining our worship space and creating welcoming environments for fellowship and growth.</p>
+          </div>
+          <div class="impact-card" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: var(--shadow-sm); text-align: center;">
+            <i class="fas fa-globe" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+            <h3>Share the Gospel</h3>
+            <p>Enable missions and evangelistic efforts that bring hope and salvation to those in need around the world.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="giving-content" style="padding: 4rem 2rem;">
+      <div class="container" style="max-width: 1100px;">
+        <div class="giving-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start;">
           <!-- Donation Form Card -->
-          <div class="service-card" style="padding: 1.5rem;">
-            <h2>Make a Donation</h2>
+          <div class="giving-form-card" style="background: white; padding: 2rem; border-radius: 10px; box-shadow: var(--shadow-sm);">
+            <h2 id="donationForm">Make a Donation</h2>
             <form id="donationForm" aria-label="Donation form">
-              <fieldset>
-                <legend>Choose an amount (NGN)</legend>
-                <div class="amounts" role="radiogroup" aria-label="Donation amounts" style="display:flex; flex-wrap:wrap; gap:.5rem;">
+              <fieldset style="border: none; margin-bottom: 1.5rem;">
+                <legend style="font-weight: 600; margin-bottom: 1rem;">Choose an amount (NGN)</legend>
+                <div class="amounts" role="radiogroup" aria-label="Donation amounts" style="display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom: 1rem;">
                   <button type="button" class="amount-btn" data-amount="2000">₦2,000</button>
                   <button type="button" class="amount-btn" data-amount="5000">₦5,000</button>
                   <button type="button" class="amount-btn" data-amount="10000">₦10,000</button>
                   <button type="button" class="amount-btn" data-amount="20000">₦20,000</button>
-                  <label class="amount-custom" style="margin-left:auto;">
+                  <label class="amount-custom">
                     <span class="sr-only">Custom amount</span>
-                    <input type="number" id="customAmount" min="1" placeholder="Custom" aria-label="Custom amount">
+                    <input type="number" id="customAmount" min="1" placeholder="Custom" aria-label="Custom amount" style="padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; width: 120px;">
                   </label>
                 </div>
               </fieldset>
 
-              <fieldset>
-                <legend>Tithe Calculator</legend>
+              <fieldset style="border: none; margin-bottom: 1.5rem;">
+                <legend style="font-weight: 600; margin-bottom: 1rem;">Tithe Calculator</legend>
                 <div class="form-row" style="display:grid; grid-template-columns: 1fr; gap: .75rem;">
                   <label for="incomeAmount">Monthly Income (NGN)
-                    <input type="number" id="incomeAmount" min="1" placeholder="Enter your monthly income" aria-label="Monthly income">
+                    <input type="number" id="incomeAmount" min="1" placeholder="Enter your monthly income" aria-label="Monthly income" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px;">
                   </label>
-                  <button type="button" id="calculateTithe" class="secondary-button" style="padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd;">Calculate Tithe (10%)</button>
-                  <p id="titheResult" style="font-weight:600; color:#333;"></p>
+                  <button type="button" id="calculateTithe" class="secondary-button" style="padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd; background: white; cursor: pointer;">Calculate Tithe (10%)</button>
+                  <p id="titheResult" style="font-weight:600; color:#333; padding: 0.5rem; background: #f9f9f9; border-radius: 6px;"></p>
                 </div>
               </fieldset>
 
-              <fieldset>
-                <legend>Frequency</legend>
-                <label><input type="radio" name="frequency" value="one-time" checked> One-time</label>
-                <label><input type="radio" name="frequency" value="weekly"> Weekly</label>
-                <label><input type="radio" name="frequency" value="monthly"> Monthly</label>
+              <fieldset style="border: none; margin-bottom: 1.5rem;">
+                <legend style="font-weight: 600; margin-bottom: 1rem;">Frequency</legend>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem;"><input type="radio" name="frequency" value="one-time" checked> One-time</label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem;"><input type="radio" name="frequency" value="weekly"> Weekly</label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem;"><input type="radio" name="frequency" value="monthly"> Monthly</label>
+                </div>
               </fieldset>
 
-              <fieldset>
-                <legend>Donor details</legend>
+              <fieldset style="border: none; margin-bottom: 1.5rem;">
+                <legend style="font-weight: 600; margin-bottom: 1rem;">Donor details</legend>
                 <div class="form-row" style="display:grid; grid-template-columns: 1fr; gap: .75rem;">
                   <label for="donorName">Name
-                    <input type="text" id="donorName" name="name" autocomplete="name" placeholder="Full name">
+                    <input type="text" id="donorName" name="name" autocomplete="name" placeholder="Full name" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px;">
                   </label>
                   <label for="donorEmail">Email (for receipt)
-                    <input type="email" id="donorEmail" name="email" autocomplete="email" placeholder="you@example.com">
+                    <input type="email" id="donorEmail" name="email" autocomplete="email" placeholder="you@example.com" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px;">
                   </label>
                   <label for="donationPurpose">Purpose
-                    <select id="donationPurpose" name="purpose">
+                    <select id="donationPurpose" name="purpose" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px;">
                       <option value="Tithe" selected>Tithe</option>
                       <option value="Offering">Offering</option>
                     </select>
@@ -104,7 +130,7 @@
 
               <div class="actions" style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap;">
                 <button type="submit" class="cta-button" id="payWithCard">Pay with Card</button>
-                <a href="#otherWays" class="secondary-button" style="display:inline-block; padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd;">Give via Bank Transfer</a>
+                <a href="#otherWays" class="secondary-button" style="display:inline-block; padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd; text-decoration: none; color: var(--color-text);">Give via Bank Transfer</a>
               </div>
 
               <p class="muted" style="margin-top:.75rem; font-size:.9rem; color:#666;">Secure online payments will redirect to our payment partner. If online payments are not yet configured, instructions will be shown.</p>
@@ -118,10 +144,9 @@
           </div>
 
           <!-- Other Ways To Give / Info Card -->
-          <div class="service-card" id="otherWays" style="padding: 1.5rem;">
-            <h2>Other Ways to Give</h2>
-            <div class="bank-details" style="margin-top:.5rem;">
-              <h3 style="margin-bottom:.25rem;">Bank Transfer</h3>
+          <div class="giving-info" id="otherWays">
+            <div class="info-card" style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;">
+              <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;"><i class="fas fa-university" style="color: var(--color-primary);"></i> Bank Transfer</h3>
               <p>
                 <strong>Account Name:</strong> Christ Apostolic Church<br>
                 <strong>Bank:</strong> Wema Bank<br>
@@ -131,25 +156,21 @@
               <p class="muted" style="font-size:.9rem; color:#666;">Update the bank details in this section once confirmed.</p>
             </div>
 
-            <div style="margin-top:1rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-              <div>
-                <h3 style="margin-bottom:.25rem;">Scan to Give</h3>
-                <canvas id="qrCode" width="160" height="160" style="border-radius:8px; border:1px solid #eee;"></canvas>
-                <p class="muted" style="font-size:.85rem; color:#666;">Scan to open our giving link.</p>
-              </div>
+            <div class="info-card" style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;">
+              <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;"><i class="fas fa-qrcode" style="color: var(--color-primary);"></i> Scan to Give</h3>
+              <canvas id="qrCode" width="160" height="160" style="border-radius:8px; border:1px solid #eee; display: block; margin: 0 auto;"></canvas>
+              <p class="muted" style="font-size:.85rem; color:#666; text-align: center;">Scan to open our giving link.</p>
+            </div>
 
-              <div style="flex:1; min-width:240px;">
-                <h3 style="margin-bottom:.25rem;">Text to Give</h3>
-                <p>Text <strong>GIVE</strong> to <strong>12345</strong> and follow the prompts.</p>
-                <p class="muted" style="font-size:.9rem; color:#666;">Replace the shortcode with your provider's assigned number.</p>
-              </div>
+            <div class="info-card" style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: var(--shadow-sm);">
+              <h3 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;"><i class="fas fa-sms" style="color: var(--color-primary);"></i> Text to Give</h3>
+              <p>Text <strong>GIVE</strong> to <strong>12345</strong> and follow the prompts.</p>
+              <p class="muted" style="font-size:.9rem; color:#666;">Replace the shortcode with your provider's assigned number.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
-  </main>
-
   <footer>
     <div class="footer-content">
       <div class="footer-section">

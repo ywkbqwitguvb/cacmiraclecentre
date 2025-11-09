@@ -468,3 +468,114 @@ footer a:focus-visible {
     border-radius: 10px;
     overflow: hidden;
 }
+
+/* Giving Page Specific Styles */
+.giving-hero {
+    background: linear-gradient(180deg, rgba(15,23,42,0.6), rgba(15,23,42,0.35)), url('../assets/hero-cross.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    margin-top: 4rem;
+}
+
+.why-give-section {
+    background: var(--color-muted);
+    padding: 4rem 2rem;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.impact-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.impact-card i {
+    font-size: 3rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.giving-content {
+    padding: 4rem 2rem;
+}
+
+.giving-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.giving-form-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+.giving-info {
+    /* Sidebar styles if needed */
+}
+
+.info-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+}
+
+.info-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-card i {
+    color: var(--color-primary);
+}
+
+.amount-btn {
+    padding: 0.6rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.amount-btn.selected {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.secondary-button {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: white;
+    color: var(--color-text);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.secondary-button:hover,
+.secondary-button:focus-visible {
+    background: var(--color-muted);
+}
