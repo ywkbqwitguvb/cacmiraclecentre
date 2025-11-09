@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Give — CAC Miracle Centres Zonal Headquarters</title>
+  <meta name="description" content="Support CAC Miracle Centres Zonal Headquarters. Your generosity helps fund ministry, outreach, and operations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <meta property="og:title" content="CAC Miracle Centres Zonal Headquarters">
+  <meta property="og:description" content="A community of worship, prayer, and miracles">
+  <meta property="og:image" content="assets/hero-cross.jpg">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" referrerpolicy="no-referrer">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar">
+    <div class="logo">CAC Miracle Centres Zonal Headquarters</div>
+    <button class="nav-toggle" id="navToggle" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars" aria-hidden="true"></i>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="sermons.html">Sermons</a></li>
+      <li><a href="giving.html" aria-current="page">Giving</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="main" class="giving-page">
+    <section class="contact-hero">
+      <div class="hero-content">
+        <h1>Partner With The Mission</h1>
+        <p>Your generosity helps us serve our community, support ministries, and share the Gospel.</p>
+        <p class="hero-sub">“Each of you should give what you have decided in your heart to give.” — 2 Corinthians 9:7</p>
+      </div>
+    </section>
+
+    <section class="giving-content" style="padding: 2rem 1rem;">
+      <div class="container" style="max-width: 1100px;">
+        <div class="service-grid" style="align-items: stretch;">
+          <!-- Donation Form Card -->
+          <div class="service-card" style="padding: 1.5rem;">
+            <h2>Make a Donation</h2>
+            <form id="donationForm" aria-label="Donation form">
+              <fieldset>
+                <legend>Choose an amount (NGN)</legend>
+                <div class="amounts" role="radiogroup" aria-label="Donation amounts" style="display:flex; flex-wrap:wrap; gap:.5rem;">
+                  <button type="button" class="amount-btn" data-amount="2000">₦2,000</button>
+                  <button type="button" class="amount-btn" data-amount="5000">₦5,000</button>
+                  <button type="button" class="amount-btn" data-amount="10000">₦10,000</button>
+                  <button type="button" class="amount-btn" data-amount="20000">₦20,000</button>
+                  <label class="amount-custom" style="margin-left:auto;">
+                    <span class="sr-only">Custom amount</span>
+                    <input type="number" id="customAmount" min="1" placeholder="Custom" aria-label="Custom amount">
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Tithe Calculator</legend>
+                <div class="form-row" style="display:grid; grid-template-columns: 1fr; gap: .75rem;">
+                  <label for="incomeAmount">Monthly Income (NGN)
+                    <input type="number" id="incomeAmount" min="1" placeholder="Enter your monthly income" aria-label="Monthly income">
+                  </label>
+                  <button type="button" id="calculateTithe" class="secondary-button" style="padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd;">Calculate Tithe (10%)</button>
+                  <p id="titheResult" style="font-weight:600; color:#333;"></p>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Frequency</legend>
+                <label><input type="radio" name="frequency" value="one-time" checked> One-time</label>
+                <label><input type="radio" name="frequency" value="weekly"> Weekly</label>
+                <label><input type="radio" name="frequency" value="monthly"> Monthly</label>
+              </fieldset>
+
+              <fieldset>
+                <legend>Donor details</legend>
+                <div class="form-row" style="display:grid; grid-template-columns: 1fr; gap: .75rem;">
+                  <label for="donorName">Name
+                    <input type="text" id="donorName" name="name" autocomplete="name" placeholder="Full name">
+                  </label>
+                  <label for="donorEmail">Email (for receipt)
+                    <input type="email" id="donorEmail" name="email" autocomplete="email" placeholder="you@example.com">
+                  </label>
+                  <label for="donationPurpose">Purpose
+                    <select id="donationPurpose" name="purpose">
+                      <option value="Tithe" selected>Tithe</option>
+                      <option value="Offering">Offering</option>
+                    </select>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:.5rem;">
+                    <input type="checkbox" id="coverFees"> I'd like to cover processing fees
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="actions" style="margin-top:1rem; display:flex; gap:.75rem; flex-wrap:wrap;">
+                <button type="submit" class="cta-button" id="payWithCard">Pay with Card</button>
+                <a href="#otherWays" class="secondary-button" style="display:inline-block; padding:.75rem 1rem; border-radius:6px; border:1px solid #ddd;">Give via Bank Transfer</a>
+              </div>
+
+              <p class="muted" style="margin-top:.75rem; font-size:.9rem; color:#666;">Secure online payments will redirect to our payment partner. If online payments are not yet configured, instructions will be shown.</p>
+
+            </form>
+
+            <div id="donationConfirmation" hidden aria-live="polite" style="margin-top:1rem; padding:1rem; background:#f0fff4; border:1px solid #c6f6d5; border-radius:8px;">
+              <h3>Thank you!</h3>
+              <p>Your intention to give has been received. If you were not redirected to a payment page, please use the bank details on this page to complete your donation. A receipt can be issued at the church office.</p>
+            </div>
+          </div>
+
+          <!-- Other Ways To Give / Info Card -->
+          <div class="service-card" id="otherWays" style="padding: 1.5rem;">
+            <h2>Other Ways to Give</h2>
+            <div class="bank-details" style="margin-top:.5rem;">
+              <h3 style="margin-bottom:.25rem;">Bank Transfer</h3>
+              <p>
+                <strong>Account Name:</strong> Christ Apostolic Church<br>
+                <strong>Bank:</strong> Wema Bank<br>
+                <strong>Account Number:</strong> 0120719978<br>
+                <strong>Currency:</strong> NGN
+              </p>
+              <p class="muted" style="font-size:.9rem; color:#666;">Update the bank details in this section once confirmed.</p>
+            </div>
+
+            <div style="margin-top:1rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+              <div>
+                <h3 style="margin-bottom:.25rem;">Scan to Give</h3>
+                <canvas id="qrCode" width="160" height="160" style="border-radius:8px; border:1px solid #eee;"></canvas>
+                <p class="muted" style="font-size:.85rem; color:#666;">Scan to open our giving link.</p>
+              </div>
+
+              <div style="flex:1; min-width:240px;">
+                <h3 style="margin-bottom:.25rem;">Text to Give</h3>
+                <p>Text <strong>GIVE</strong> to <strong>12345</strong> and follow the prompts.</p>
+                <p class="muted" style="font-size:.9rem; color:#666;">Replace the shortcode with your provider's assigned number.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <p>2/4 Orotayo Street, Off Caterpillar Bus Stop</p>
+        <p>Phone: 08061618862</p>
+        <p>Email: info@cacmiraclecentres.org</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CAC Miracle Centres Zonal Headquarters. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="js/main.js" defer></script>
+  <script>
+    // Giving page JS — unified, lightweight MVP with safe fallbacks
+    (function(){
+      // TODO: set your payment provider merchant ID to enable hosted checkout
+      // Example for Naria: 'org_ABCDE12345'
+      const MERCHANT_ID = '';
+      const CURRENCY = 'NGN';
+
+      const amounts = document.querySelectorAll('.amount-btn');
+      const customAmount = document.getElementById('customAmount');
+      const donationForm = document.getElementById('donationForm');
+      const confirmation = document.getElementById('donationConfirmation');
+      const payBtn = document.getElementById('payWithCard');
+
+      let selectedAmount = null;
+
+      // Amount selection
+      amounts.forEach(btn => btn.addEventListener('click', () => {
+        amounts.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedAmount = btn.dataset.amount;
+        customAmount.value = '';
+      }));
+
+      customAmount.addEventListener('input', () => {
+        amounts.forEach(b => b.classList.remove('selected'));
+        selectedAmount = customAmount.value;
+      });
+
+      // Submit handler
+      donationForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('donorName').value.trim();
+        const email = document.getElementById('donorEmail').value.trim();
+        const purpose = document.getElementById('donationPurpose').value;
+        const frequency = donationForm.querySelector('input[name="frequency"]:checked').value;
+        const coverFees = document.getElementById('coverFees').checked;
+        const amount = parseFloat(selectedAmount);
+
+        if (!amount || amount <= 0) {
+          alert('Please enter a valid donation amount.');
+          return;
+        }
+
+        // If a merchant is configured, redirect to hosted checkout (example URL format)
+        if (MERCHANT_ID) {
+          const returnUrl = encodeURIComponent(window.location.href);
+          const meta = encodeURIComponent(JSON.stringify({ name, email, purpose, coverFees }));
+          const nariaUrl = `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}&amount=${encodeURIComponent(amount.toFixed(2))}&currency=${encodeURIComponent(CURRENCY)}&frequency=${encodeURIComponent(frequency)}&metadata=${meta}&returnUrl=${returnUrl}`;
+          window.location.href = nariaUrl;
+          return;
+        }
+
+        // Fallback when online payments are not configured
+        // Display a confirmation and provide instructions to use Bank Transfer
+        confirmation.hidden = false;
+        donationForm.hidden = true;
+
+        // Optionally open a prefilled email to finance/admin for manual processing
+        const mail = 'info@cacmiraclecentres.org';
+        const subject = encodeURIComponent('Donation Intention');
+        const body = encodeURIComponent(
+          `Hello,\n\nI would like to give ${CURRENCY} ${amount.toFixed(2)} (${frequency}).\nPurpose: ${purpose}\nName: ${name || '-'}\nEmail: ${email || '-'}\nCover fees: ${coverFees ? 'Yes' : 'No'}\n\nThank you.`
+        );
+        // Uncomment the next line if you want to automatically open the mail client
+        // window.location.href = `mailto:${mail}?subject=${subject}&body=${body}`;
+      });
+
+      // QR code generation — direct to hosted checkout if configured; otherwise this page
+      const qrTarget = MERCHANT_ID ? `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}` : window.location.href;
+      new QRious({ element: document.getElementById('qrCode'), value: qrTarget, size: 160 });
+
+      // Tithe calculator
+      const calculateTitheBtn = document.getElementById('calculateTithe');
+      const incomeAmount = document.getElementById('incomeAmount');
+      const titheResult = document.getElementById('titheResult');
+
+      calculateTitheBtn.addEventListener('click', () => {
+        const income = parseFloat(incomeAmount.value);
+        if (income && income > 0) {
+          const tithe = income * 0.1;
+          titheResult.textContent = `Your tithe amount: ₦${tithe.toFixed(2)}`;
+          // Set the selected amount to the calculated tithe
+          selectedAmount = tithe.toFixed(2);
+          amounts.forEach(b => b.classList.remove('selected'));
+          customAmount.value = tithe.toFixed(2);
+        } else {
+          titheResult.textContent = 'Please enter a valid income amount.';
+        }
+      });
+
+      // If no merchant configured, visually indicate the button still works with fallback
+      if (!MERCHANT_ID) {
+        payBtn.setAttribute('title', 'Online payments will show instructions until a provider is configured.');
+      }
+    })();
+  </script>
+</body>
+</html>
