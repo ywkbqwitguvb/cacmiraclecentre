@@ -5,7 +5,7 @@ class SermonArchive {
             {
                 title: 'Walking in Faith',
                 date: '2025-10-06',
-                speaker: 'Pastor John Smith',
+                speaker: 'Pastor Johnson',
                 category: 'faith',
                 thumbnail: 'assets/sermon1.jpg',
                 videoUrl: 'https://youtube.com/watch?v=example1',
@@ -16,7 +16,7 @@ class SermonArchive {
             {
                 title: 'Building Strong Families',
                 date: '2025-10-13',
-                speaker: 'Pastor John Smith',
+                speaker: 'Pastor Johnson',
                 category: 'family',
                 thumbnail: 'assets/sermon2.jpg',
                 videoUrl: 'https://youtube.com/watch?v=example2',
@@ -27,7 +27,7 @@ class SermonArchive {
             {
                 title: 'The Power of Worship',
                 date: '2025-10-20',
-                speaker: 'Pastor Sarah Johnson',
+                speaker: 'Pastor M.A Bankole',
                 category: 'worship',
                 thumbnail: 'assets/sermon3.jpg',
                 videoUrl: 'https://youtube.com/watch?v=example3',
@@ -38,7 +38,7 @@ class SermonArchive {
             {
                 title: 'Grace and Mercy',
                 date: '2025-10-27',
-                speaker: 'Pastor John Smith',
+                speaker: 'Pastor M.A Bankole',
                 category: 'faith',
                 thumbnail: 'assets/sermon4.jpg',
                 videoUrl: 'https://youtube.com/watch?v=example4',
