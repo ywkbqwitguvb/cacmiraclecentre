@@ -1123,9 +1123,7 @@
     box-shadow: var(--shadow-sm);
 }
 
-.giving-info {
-    /* Sidebar styles if needed */
-}
+/* .giving-info removed - no styles required currently */
 
 .info-card {
     background: white;

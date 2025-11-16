@@ -1,4 +1,281 @@
-// Mobile Navigation Toggle (accessible)
+// Main JS for CAC Miracle Centres site
+// Consolidated: navigation, forms, donation modal (Naria), gallery, announcements, hero slider
+
+/* ===================== Navigation Toggle ===================== */
+function toggleNav(open) {
+    const links = document.getElementById('navLinks');
+    const toggle = document.getElementById('navToggle');
+    if (!links || !toggle) return;
+    if (typeof open === 'boolean') {
+        links.classList.toggle('active', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        return;
+    }
+    const isOpen = links.classList.toggle('active');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+}
+
+// Direct binding and delegated fallback for nav toggling
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest && e.target.closest('.nav-toggle');
+    if (btn) {
+        e.preventDefault();
+        toggleNav();
+        return;
+    }
+    if (e.target.matches && e.target.matches('#navLinks a')) {
+        toggleNav(false);
+    }
+});
+
+/* ===================== Simple Form Handlers ===================== */
+function handleSubmit(event) {
+    event.preventDefault();
+    alert('Thank you for your message! We will get back to you soon.');
+    event.target.reset();
+}
+function handlePrayerRequest(event) {
+    event.preventDefault();
+    alert('Thank you for sharing your prayer request. Our prayer team will be praying for you.');
+    event.target.reset();
+}
+function handleNewsletterSignup(event) {
+    event.preventDefault();
+    alert('Thank you for subscribing to our newsletter!');
+    event.target.reset();
+}
+
+/* ===================== Donation Modal (Hosted Checkout placeholder) ===================== */
+function showDonationModal() {
+    let modal = document.getElementById('donationModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'donationModal';
+        modal.className = 'modal donation-modal';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-label', 'Donation dialog');
+        modal.innerHTML = `
+            <div class="modal-content">
+                <button class="close-modal" aria-label="Close donation dialog">&times;</button>
+                <h2 id="donationTitle">Support Our Ministry</h2>
+                <p id="donationDescription">Choose an amount and frequency to support our work. You will be redirected to a secure hosted checkout to complete the payment.</p>
+                <div class="donation-options" role="list" aria-labelledby="donationTitle">
+                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="10">$10</button>
+                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="25">$25</button>
+                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="50">$50</button>
+                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="100">$100</button>
+                    <button class="donation-amount custom" role="button" tabindex="0" aria-pressed="false" data-amount="custom">Custom Amount</button>
+                </div>
+                <div class="custom-amount-input" style="display: none;">
+                    <label for="customAmount">Custom Amount (USD)</label>
+                    <input type="number" id="customAmount" placeholder="Enter amount" min="1" step="1" inputmode="numeric" aria-label="Custom donation amount">
+                </div>
+                <fieldset class="donation-frequency" aria-label="Donation frequency">
+                    <legend>Donation Frequency</legend>
+                    <label><input type="radio" name="frequency" value="one-time" checked> One-time</label>
+                    <label><input type="radio" name="frequency" value="monthly"> Monthly</label>
+                </fieldset>
+                <div class="donation-actions">
+                    <button id="proceedToNaria" class="submit-btn">Proceed to Checkout</button>
+                </div>
+                <div class="donation-confirm-overlay" style="display:none;" aria-live="polite"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // event wiring
+        modal.querySelector('.close-modal').addEventListener('click', () => modal.classList.remove('active'));
+
+        const donationAmounts = modal.querySelectorAll('.donation-amount');
+        const customWrapper = modal.querySelector('.custom-amount-input');
+        const customInput = modal.querySelector('#customAmount');
+
+        function selectAmount(btn) {
+            donationAmounts.forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
+            btn.classList.add('selected'); btn.setAttribute('aria-pressed', 'true');
+            if (btn.dataset.amount === 'custom') { customWrapper.style.display = 'block'; customInput.focus(); }
+            else { customWrapper.style.display = 'none'; }
+        }
+
+        donationAmounts.forEach(btn => {
+            btn.addEventListener('click', () => selectAmount(btn));
+            btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectAmount(btn); } });
+        });
+
+        const proceed = modal.querySelector('#proceedToNaria');
+        const confirmOverlay = modal.querySelector('.donation-confirm-overlay');
+
+        proceed.addEventListener('click', () => {
+            const selected = modal.querySelector('.donation-amount.selected');
+            if (!selected) { alert('Please select or enter a donation amount.'); return; }
+            let amount = selected.dataset.amount === 'custom' ? customInput.value : selected.dataset.amount;
+            amount = parseFloat(amount);
+            if (isNaN(amount) || amount <= 0) { alert('Please enter a valid donation amount greater than $0.'); customInput.focus(); return; }
+            const frequency = modal.querySelector('input[name="frequency"]:checked').value;
+
+            confirmOverlay.innerHTML = `
+                <div class="confirm-panel" role="alertdialog" aria-labelledby="confirmTitle" aria-describedby="confirmDesc">
+                    <h3 id="confirmTitle">Confirm Donation</h3>
+                    <p id="confirmDesc">You are about to be redirected to a secure hosted checkout to complete a ${frequency === 'monthly' ? 'monthly' : 'one-time'} donation of <strong>$${amount.toFixed(2)}</strong>.</p>
+                    <div class="confirm-actions">
+                        <button id="confirmProceed" class="submit-btn">Continue to Checkout</button>
+                        <button id="confirmCancel" class="secondary-btn">Cancel</button>
+                    </div>
+                </div>
+            `;
+            confirmOverlay.style.display = 'block';
+            const confirmProceed = modal.querySelector('#confirmProceed');
+            const confirmCancel = modal.querySelector('#confirmCancel');
+            confirmProceed.focus();
+            confirmCancel.addEventListener('click', () => confirmOverlay.style.display = 'none');
+
+            confirmProceed.addEventListener('click', () => {
+                const NARIA_MERCHANT_ID = ''; // TODO: set merchant id
+                if (!NARIA_MERCHANT_ID) { alert('Donation checkout is not configured. Please contact the site administrator.'); return; }
+                const merchant = encodeURIComponent(NARIA_MERCHANT_ID);
+                const returnUrl = encodeURIComponent(window.location.href);
+                const checkoutUrl = `https://checkout.naria.org/checkout?merchant=${merchant}&amount=${amount.toFixed(2)}&currency=USD&frequency=${encodeURIComponent(frequency)}&returnUrl=${returnUrl}`;
+                window.location.href = checkoutUrl;
+            });
+        });
+    }
+    modal.classList.add('active');
+}
+
+/* ===================== Photo Gallery Class ===================== */
+class PhotoGallery {
+    constructor() { this.initializeGallery(); }
+    initializeGallery() {
+        const items = document.querySelectorAll('.gallery-item');
+        const modal = document.querySelector('.modal');
+        if (!items.length || !modal) return;
+        items.forEach(i => i.addEventListener('click', () => {
+            const img = i.querySelector('img');
+            if (!img) return;
+            let content = modal.querySelector('.modal-content');
+            if (!content) { modal.innerHTML = '<div class="modal-content"><button class="close-modal">&times;</button><img src="" alt=""/></div>'; content = modal.querySelector('.modal-content'); }
+            content.querySelector('img').src = img.src;
+            modal.classList.add('active');
+            modal.querySelector('.close-modal').addEventListener('click', () => modal.classList.remove('active'));
+        }));
+    }
+}
+
+/* ===================== Announcements ===================== */
+const announcements = [
+    { title: 'Sunday Service', date: 'Every Sunday at 10:00 AM', description: 'Join us for worship and fellowship' },
+    { title: 'Bible Study', date: 'Every Wednesday at 7:00 PM', description: 'Deep dive into Scripture' }
+];
+function populateAnnouncements() {
+    const list = document.getElementById('announcementList');
+    if (!list) return;
+    announcements.forEach(a => {
+        const d = document.createElement('div'); d.className = 'announcement';
+        d.innerHTML = `<h3>${a.title}</h3><p class="date">${a.date}</p><p>${a.description}</p>`;
+        list.appendChild(d);
+    });
+}
+
+/* ===================== Hero Slider ===================== */
+function initHeroSlider() {
+    const slider = document.querySelector('.hero-slider');
+    if (!slider) return;
+    const slides = Array.from(slider.querySelectorAll('.slide'));
+    const prevBtn = slider.querySelector('.slider-control.prev');
+    const nextBtn = slider.querySelector('.slider-control.next');
+    const dotsContainer = slider.querySelector('.slider-dots');
+    let current = 0, interval = null;
+    const delay = 5000;
+
+    // create dots container if missing
+    if (!dotsContainer) {
+        const dc = document.createElement('div'); dc.className = 'slider-dots'; slider.appendChild(dc);
+    }
+
+    slides.forEach((s, i) => {
+        const btn = document.createElement('button'); btn.type = 'button'; btn.setAttribute('aria-label', `Go to slide ${i+1}`);
+        btn.addEventListener('click', () => goTo(i)); slider.querySelector('.slider-dots').appendChild(btn);
+    });
+    const dots = Array.from(slider.querySelectorAll('.slider-dots button'));
+
+    function update() {
+        slides.forEach((s, i) => { const active = i === current; s.classList.toggle('active', active); s.setAttribute('aria-hidden', active ? 'false' : 'true'); if (dots[i]) dots[i].classList.toggle('active', active); });
+    }
+    function goTo(i) { current = (i + slides.length) % slides.length; update(); reset(); }
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+    function start() { if (interval) return; interval = setInterval(next, delay); }
+    function stop() { if (!interval) return; clearInterval(interval); interval = null; }
+    function reset() { stop(); start(); }
+
+    if (nextBtn) nextBtn.addEventListener('click', next); if (prevBtn) prevBtn.addEventListener('click', prev);
+    slider.addEventListener('mouseenter', stop); slider.addEventListener('mouseleave', start);
+    slider.addEventListener('focusin', stop); slider.addEventListener('focusout', start);
+    document.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next(); });
+
+    update(); start();
+}
+
+// Init hero slider when DOM is ready. If script is loaded after DOM is ready, start immediately.
+if (document.readyState !== 'loading') {
+    initHeroSlider();
+} else {
+    document.addEventListener('DOMContentLoaded', initHeroSlider);
+}
+
+/* ===================== Giving Page Helpers (QR, Tithe) ===================== */
+(function(){
+    const MERCHANT_ID = '';
+    const CURRENCY = 'NGN';
+    const amounts = document.querySelectorAll('.amount-btn');
+    const customAmount = document.getElementById('customAmount');
+    const donationForm = document.getElementById('donationForm');
+    const confirmation = document.getElementById('donationConfirmation');
+    const payBtn = document.getElementById('payWithCard');
+    let selectedAmount = null;
+    if (amounts && customAmount) {
+        amounts.forEach(btn => btn.addEventListener('click', () => { amounts.forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selectedAmount = btn.dataset.amount; customAmount.value = ''; }));
+        customAmount.addEventListener('input', () => { amounts.forEach(b => b.classList.remove('selected')); selectedAmount = customAmount.value; });
+    }
+    if (donationForm) donationForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('donorName')?.value.trim();
+        const email = document.getElementById('donorEmail')?.value.trim();
+        const purpose = document.getElementById('donationPurpose')?.value || '';
+        const frequency = donationForm.querySelector('input[name="frequency"]:checked')?.value || 'one-time';
+        const coverFees = document.getElementById('coverFees')?.checked || false;
+        const amount = parseFloat(selectedAmount);
+        if (!amount || amount <= 0) { alert('Please enter a valid donation amount.'); return; }
+        if (MERCHANT_ID) {
+            const returnUrl = encodeURIComponent(window.location.href);
+            const meta = encodeURIComponent(JSON.stringify({ name, email, purpose, coverFees }));
+            const nariaUrl = `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}&amount=${encodeURIComponent(amount.toFixed(2))}&currency=${encodeURIComponent(CURRENCY)}&frequency=${encodeURIComponent(frequency)}&metadata=${meta}&returnUrl=${returnUrl}`;
+            window.location.href = nariaUrl; return;
+        }
+        if (confirmation) { confirmation.hidden = false; donationForm.hidden = true; }
+    });
+    const qrTarget = MERCHANT_ID ? `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}` : window.location.href;
+    if (window.QRious && document.getElementById('qrCode')) new QRious({ element: document.getElementById('qrCode'), value: qrTarget, size: 160 });
+    const calculateTitheBtn = document.getElementById('calculateTithe');
+    const incomeAmount = document.getElementById('incomeAmount');
+    const titheResult = document.getElementById('titheResult');
+    if (calculateTitheBtn) calculateTitheBtn.addEventListener('click', () => {
+        const income = parseFloat(incomeAmount?.value);
+        if (income && income > 0) { const tithe = income * 0.1; titheResult.textContent = `Your tithe amount: ₦${tithe.toFixed(2)}`; selectedAmount = tithe.toFixed(2); amounts.forEach(b => b.classList.remove('selected')); if (customAmount) customAmount.value = tithe.toFixed(2); }
+        else { titheResult.textContent = 'Please enter a valid income amount.'; }
+    });
+    if (!MERCHANT_ID && payBtn) payBtn?.setAttribute('title', 'Online payments will show instructions until a provider is configured.');
+})();
+
+/* ===================== Init on DOM ready ===================== */
+document.addEventListener('DOMContentLoaded', () => {
+    populateAnnouncements();
+    new PhotoGallery();
+    // wire donate button if present
+    document.querySelectorAll('.donate-btn').forEach(b => b.addEventListener('click', (e) => { e.preventDefault(); showDonationModal(); }));
+});
+
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
 
@@ -88,62 +365,58 @@ const navLinks = document.getElementById('navLinks');
     } else {
         document.addEventListener('DOMContentLoaded', initHeroSlider);
     }
-                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="10">$10</button>
-                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="25">$25</button>
-                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-Amount="50" data-amount="50">$50</button>
-                    <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="100">$100</button>
-                    <button class="donation-amount custom" role="button" tabindex="0" aria-pressed="false" data-amount="custom">Custom Amount</button>
-                </div>
-                <div class="custom-amount-input" style="display: none;">
-                    <label for="customAmount">Custom Amount (USD)</label>
-                    <input type="number" id="customAmount" placeholder="Enter amount" min="1" step="1" inputmode="numeric" aria-label="Custom donation amount">
-                </div>
-                <fieldset class="donation-frequency" aria-label="Donation frequency">
-                    <legend>Donation Frequency</legend>
-                    <label>
-                        <input type="radio" name="frequency" value="one-time" checked> One-time
-                    </label>
-                    <label>
-                        <input type="radio" name="frequency" value="monthly"> Monthly
-                    </label>
-                </fieldset>
-                <div class="donation-actions">
-                    <button id="proceedToNaria" class="submit-btn">Proceed to Checkout</button>
-                </div>
-                <div class="donation-confirm-overlay" style="display:none;" aria-live="polite"></div>
-            </div>
-        ;
-        document.body.appendChild(modal);
 
-        // Add event listeners
-        const closeBtn = modal.querySelector('.close-modal');
-        closeBtn.addEventListener('click', () => closeDonationModal());
-
-        // Close on Escape
-        modal.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeDonationModal();
-        });
-
-        const donationAmounts = modal.querySelectorAll('.donation-amount');
-        const customAmountWrapper = modal.querySelector('.custom-amount-input');
-        const customAmountInput = modal.querySelector('#customAmount');
-
-        function selectAmount(btn) {
-            donationAmounts.forEach(b => {
-                b.classList.remove('selected');
-                b.setAttribute('aria-pressed', 'false');
-            });
-            btn.classList.add('selected');
-            btn.setAttribute('aria-pressed', 'true');
-            if (btn.dataset.amount === 'custom') {
-                customAmountWrapper.style.display = 'block';
-                customAmountInput.focus();
-            } else {
-                customAmountWrapper.style.display = 'none';
-            }
+    /* ===================== Giving Page Helpers (QR, Tithe) ===================== */
+    (function(){
+        const MERCHANT_ID = '';
+        const CURRENCY = 'NGN';
+        const amounts = document.querySelectorAll('.amount-btn');
+        const customAmount = document.getElementById('customAmount');
+        const donationForm = document.getElementById('donationForm');
+        const confirmation = document.getElementById('donationConfirmation');
+        const payBtn = document.getElementById('payWithCard');
+        let selectedAmount = null;
+        if (amounts && customAmount) {
+            amounts.forEach(btn => btn.addEventListener('click', () => { amounts.forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selectedAmount = btn.dataset.amount; customAmount.value = ''; }));
+            customAmount.addEventListener('input', () => { amounts.forEach(b => b.classList.remove('selected')); selectedAmount = customAmount.value; });
         }
+        if (donationForm) donationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('donorName')?.value.trim();
+            const email = document.getElementById('donorEmail')?.value.trim();
+            const purpose = document.getElementById('donationPurpose')?.value || '';
+            const frequency = donationForm.querySelector('input[name="frequency"]:checked')?.value || 'one-time';
+            const coverFees = document.getElementById('coverFees')?.checked || false;
+            const amount = parseFloat(selectedAmount);
+            if (!amount || amount <= 0) { alert('Please enter a valid donation amount.'); return; }
+            if (MERCHANT_ID) {
+                const returnUrl = encodeURIComponent(window.location.href);
+                const meta = encodeURIComponent(JSON.stringify({ name, email, purpose, coverFees }));
+                const nariaUrl = `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}&amount=${encodeURIComponent(amount.toFixed(2))}&currency=${encodeURIComponent(CURRENCY)}&frequency=${encodeURIComponent(frequency)}&metadata=${meta}&returnUrl=${returnUrl}`;
+                window.location.href = nariaUrl; return;
+            }
+            if (confirmation) { confirmation.hidden = false; donationForm.hidden = true; }
+        });
+        const qrTarget = MERCHANT_ID ? `https://checkout.naria.org/checkout?merchant=${encodeURIComponent(MERCHANT_ID)}` : window.location.href;
+        if (window.QRious && document.getElementById('qrCode')) new QRious({ element: document.getElementById('qrCode'), value: qrTarget, size: 160 });
+        const calculateTitheBtn = document.getElementById('calculateTithe');
+        const incomeAmount = document.getElementById('incomeAmount');
+        const titheResult = document.getElementById('titheResult');
+        if (calculateTitheBtn) calculateTitheBtn.addEventListener('click', () => {
+            const income = parseFloat(incomeAmount?.value);
+            if (income && income > 0) { const tithe = income * 0.1; titheResult.textContent = `Your tithe amount: ₦${tithe.toFixed(2)}`; selectedAmount = tithe.toFixed(2); amounts.forEach(b => b.classList.remove('selected')); if (customAmount) customAmount.value = tithe.toFixed(2); }
+            else { titheResult.textContent = 'Please enter a valid income amount.'; }
+        });
+        if (!MERCHANT_ID && payBtn) payBtn?.setAttribute('title', 'Online payments will show instructions until a provider is configured.');
+    })();
 
-        donationAmounts.forEach(btn => {
+    /* ===================== Init on DOM ready ===================== */
+    document.addEventListener('DOMContentLoaded', () => {
+        populateAnnouncements();
+        new PhotoGallery();
+        // wire donate button if present
+        document.querySelectorAll('.donate-btn').forEach(b => b.addEventListener('click', (e) => { e.preventDefault(); showDonationModal(); }));
+    });
             btn.addEventListener('click', () => selectAmount(btn));
             btn.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
