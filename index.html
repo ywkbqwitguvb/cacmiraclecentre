@@ -24,7 +24,10 @@
         <button id="closeAnnouncement" aria-label="Close announcement">&times;</button>
     </div>
     <nav class="navbar">
-        <div class="logo">CAC Miracle Centres Zonal Headquarters</div>
+        <div class="logo">
+            <img src="./assets/logo.png" alt="CAC Miracle Centres Logo" style="height: 58px; width: auto; vertical-align: middle; margin-right: 0.5rem;">
+            CAC Miracle Centres Zonal Headquarters
+        </div>
         <button class="nav-toggle" id="navToggle" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars" aria-hidden="true"></i>
         </button>
@@ -41,11 +44,22 @@
     </nav>
 
     <header class="hero">
+        <div class="hero-slider" aria-roledescription="carousel">
+            <div class="slide" data-index="0" style="background-image: url('assets/hero-1.jpg')" aria-hidden="false"></div>
+            <div class="slide" data-index="1" style="background-image: url('assets/hero-2.jpg')" aria-hidden="true"></div>
+            <div class="slide" data-index="2" style="background-image: url('assets/hero-3.jpg')" aria-hidden="true"></div>
+            <button class="slider-control prev" aria-label="Previous slide">‹</button>
+            <button class="slider-control next" aria-label="Next slide">›</button>
+            <div class="slider-dots" aria-hidden="true"></div>
+        </div>
+
         <div class="hero-content">
             <h1>Welcome to CAC Miracle Centres Zonal HQ</h1>
             <p>A community of worship, prayer, and miracles</p>
-            <a href="services.html" class="cta-button">Join Us This Sunday</a>
-            <a href="sermons.html" class="cta-button">Watch Sermon</a>
+            <div class="hero-ctas">
+                <a href="services.html" class="cta-button">Join Us This Sunday</a>
+                <a href="sermons.html" class="cta-button">Watch Sermon</a>
+            </div>
         </div>
     </header>
 
