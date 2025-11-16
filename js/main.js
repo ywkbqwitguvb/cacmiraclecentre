@@ -2,88 +2,92 @@
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
 
-if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-        const isOpen = navLinks.classList.toggle('active');
-        navToggle.setAttribute('aria-expanded', String(isOpen));
-    });
-    // Close menu on link click (mobile)
-    navLinks.addEventListener('click', (e) => {
-        if (e.target.matches('a') && navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            navToggle.setAttribute('aria-expanded', 'false');
+    const MERCHANT_ID = '';
+
+    // Hero slider initialization
+    function initHeroSlider() {
+        const slider = document.querySelector('.hero-slider');
+        if (!slider) return;
+        const slides = Array.from(slider.querySelectorAll('.slide'));
+        const prevBtn = slider.querySelector('.slider-control.prev');
+        const nextBtn = slider.querySelector('.slider-control.next');
+        const dotsContainer = slider.querySelector('.slider-dots');
+        let current = 0;
+        let interval = null;
+        const delay = 5000; // 5s
+
+        // create dots
+        slides.forEach((s, i) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.setAttribute('aria-label', `Go to slide ${i+1}`);
+            btn.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(btn);
+        });
+
+        const dots = Array.from(dotsContainer.querySelectorAll('button'));
+
+        function update() {
+            slides.forEach((s, i) => {
+                const active = i === current;
+                s.classList.toggle('active', active);
+                s.setAttribute('aria-hidden', active ? 'false' : 'true');
+                if (dots[i]) dots[i].classList.toggle('active', active);
+            });
         }
-    });
-}
 
-// Contact Form Handling
-function handleSubmit(event) {
-    event.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-    };
+        function goTo(i) {
+            current = (i + slides.length) % slides.length;
+            update();
+            resetInterval();
+        }
 
-    // Here you would typically send the form data to a server
-    // For MVP, we'll just show an alert
-    alert('Thank you for your message! We will get back to you soon.');
-    event.target.reset();
-}
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
 
-// Prayer Request Form Handling
-function handlePrayerRequest(event) {
-    event.preventDefault();
-    
-    const prayerData = {
-        name: document.getElementById('prayerName').value,
-        email: document.getElementById('prayerEmail').value,
-        request: document.getElementById('prayerRequest').value,
-        isPrivate: document.getElementById('isPrivate').checked
-    };
+        function startInterval() {
+            if (interval) return;
+            interval = setInterval(next, delay);
+        }
 
-    // Here you would typically send the prayer request to a server
-    alert('Thank you for sharing your prayer request. Our prayer team will be praying for you.');
-    event.target.reset();
-}
+        function stopInterval() {
+            if (!interval) return;
+            clearInterval(interval);
+            interval = null;
+        }
 
-// Newsletter Signup
-function handleNewsletterSignup(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('newsletterEmail').value;
-    // Here you would typically send the email to your newsletter service
-    alert('Thank you for subscribing to our newsletter!');
-    event.target.reset();
-}
+        function resetInterval() {
+            stopInterval();
+            startInterval();
+        }
 
-// Donation Button Handler
-const donateBtn = document.querySelector('.donate-btn');
-if (donateBtn) {
-    donateBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showDonationModal();
-    });
-}
+        // attach controls
+        if (nextBtn) nextBtn.addEventListener('click', next);
+        if (prevBtn) prevBtn.addEventListener('click', prev);
 
-function showDonationModal() {
-    // Create modal if it doesn't exist
-    let modal = document.getElementById('donationModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'donationModal';
-        modal.className = 'modal donation-modal';
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('aria-modal', 'true');
-        modal.setAttribute('aria-label', 'Donation dialog');
-        modal.innerHTML = `
-            <div class="modal-content">
-                <button class="close-modal" aria-label="Close donation dialog">&times;</button>
-                <h2 id="donationTitle">Support Our Ministry</h2>
-                <p id="donationDescription">Choose an amount and frequency to support our work. You will be redirected to a secure hosted checkout (Naria) to complete the payment.</p>
-                <div class="donation-options" role="list" aria-labelledby="donationTitle">
+        // pause on hover / focus
+        slider.addEventListener('mouseenter', stopInterval);
+        slider.addEventListener('mouseleave', startInterval);
+        slider.addEventListener('focusin', stopInterval);
+        slider.addEventListener('focusout', startInterval);
+
+        // keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+        });
+
+        // init
+        update();
+        startInterval();
+    }
+
+    // Init hero slider when DOM is ready. If script is loaded after DOM is ready, start immediately.
+    if (document.readyState !== 'loading') {
+        initHeroSlider();
+    } else {
+        document.addEventListener('DOMContentLoaded', initHeroSlider);
+    }
                     <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="10">$10</button>
                     <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-amount="25">$25</button>
                     <button class="donation-amount" role="button" tabindex="0" aria-pressed="false" data-Amount="50" data-amount="50">$50</button>
@@ -108,7 +112,7 @@ function showDonationModal() {
                 </div>
                 <div class="donation-confirm-overlay" style="display:none;" aria-live="polite"></div>
             </div>
-        `;
+        ;
         document.body.appendChild(modal);
 
         // Add event listeners
@@ -209,7 +213,7 @@ function showDonationModal() {
                 window.location.href = checkoutUrl;
             });
         });
-    }
+    
 
     // Show the modal and move focus inside it
     modal.classList.add('active');
@@ -226,8 +230,7 @@ function showDonationModal() {
             const donateBtnMain = document.querySelector('.donate-btn');
             if (donateBtnMain) donateBtnMain.focus();
         }
-    }
-}
+    
 
 // Photo Gallery
 class PhotoGallery {
