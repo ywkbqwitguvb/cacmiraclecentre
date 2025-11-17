@@ -54,13 +54,42 @@
         </div>
 
         <div class="hero-content">
-            <h1>Welcome to CAC Miracle Centres Zonal HQ</h1>
-            <p>A community of worship, prayer, and miracles</p>
+            <h1 id="heroTitle">Welcome to CAC Miracle Centres Zonal HQ</h1>
+            <p id="heroSubtitle">A community of worship, prayer, and miracles</p>
             <div class="hero-ctas">
                 <a href="services.html" class="cta-button">Join Us This Sunday</a>
                 <a href="sermons.html" class="cta-button">Watch Sermon</a>
             </div>
         </div>
+        <script>
+        // Typewriter effect for hero title and subtitle
+        function typewriterEffect(element, text, speed, callback) {
+            let i = 0;
+            function type() {
+                if (i <= text.length) {
+                    element.textContent = text.slice(0, i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var title = document.getElementById('heroTitle');
+            var subtitle = document.getElementById('heroSubtitle');
+            var titleText = title.textContent;
+            var subtitleText = subtitle.textContent;
+            title.textContent = '';
+            subtitle.textContent = '';
+            typewriterEffect(title, titleText, 40, function() {
+                setTimeout(function() {
+                    typewriterEffect(subtitle, subtitleText, 30);
+                }, 400);
+            });
+        });
+        </script>
     </header>
 
     <main id="main">

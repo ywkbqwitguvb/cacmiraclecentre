@@ -189,35 +189,36 @@
     margin-bottom: 1rem;
 }
 
-.sermon-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    color: var(--color-text);
+.services-grid .service-card {
+    background: var(--color-surface);
+    padding: var(--card-padding);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.2s ease;
+}
+.services-grid .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
 }
 
-.sermon-content p {
-    color: #666;
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
+/* Image inside service cards (homepage events) - scoped to avoid conflicts with global styles */
+.service-image {
+    width: 100%;
+    height: 180px;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 1.25rem;
 }
 
-.sermon-links {
-    display: flex;
-    gap: 1rem;
+@media (max-width: 700px) {
+    .service-image {
+        height: 140px;
+    }
 }
 
-.sermon-links a {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--color-primary);
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    transition: background 0.3s;
-}
 
 .sermon-links a:hover {
     background: var(--color-primary-dark);
@@ -914,15 +915,16 @@
 }
 
 .testimonial-card {
-    background: rgb(189, 189, 211);
+    background: var(--color-surface);
     color: var(--color-text);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
     min-width: 300px;
-    max-width: 500px;
+    max-width: 540px;
     display: none;
     text-align: center;
+    border: 1px solid #ececec;
 }
 
 .testimonial-card p {
