@@ -236,11 +236,14 @@ body {
     margin-bottom: 1rem;
     letter-spacing: 0.01em;
     line-height: 1.1;
+    background: var(--gradient-main)
 }
 .hero p {
     font-size: clamp(1.1rem, 1.7vw, 1.35rem);
     opacity: 0.98;
     font-weight: 500;
+    background: var(--gradient-main)
+
 }
 
 .cta-button {
