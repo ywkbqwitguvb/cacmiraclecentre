@@ -319,7 +319,7 @@ h2 {
     background-color: var(--color-muted);
     box-shadow: var(--shadow-sm);
     padding: 2rem;
-    border-radius: 5px;
+    border-radius: 2px;
     text-align: center;
 }
 .service-image {
